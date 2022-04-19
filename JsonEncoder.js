@@ -2,25 +2,27 @@ function writeStringForMultiples(jsonEncodedString, value) {
     return jsonEncodedString === "" ? `${value}` : `,${value}`;
 }
 
+function encodeArrays(value, key) {
+    let arrayString = ""
+    value.forEach(subValue => {
+        if (typeof subValue == 'number') {
+            arrayString += writeStringForMultiples(arrayString, `${subValue}`);
+        } else {
+            arrayString += writeStringForMultiples(arrayString, `"${subValue}"`);
+        }
+    })
+    return `"${key}":[${arrayString}]`;
+}
+
 function encoder(object) {
     let jsonEncodedString = "";
     for (const [key, value] of Object.entries(object)) {
-        if(Array.isArray(value)){
-            let arrayString = ""
-           value.forEach(subValue => {
-               if(typeof subValue == 'number'){
-                   arrayString += writeStringForMultiples(arrayString, `${subValue}`);
-               }
-               else {
-                   arrayString += writeStringForMultiples(arrayString, `"${subValue}"`);
-               }
-           })
-           jsonEncodedString += `"${key}":[${arrayString}]`;
-        }
-        else if (typeof value === 'number') {
+        if (Array.isArray(value)) {
+            const encodedArray = encodeArrays(value, key);
+            jsonEncodedString += writeStringForMultiples(jsonEncodedString, encodedArray);
+        } else if (typeof value === 'number') {
             jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
-        }
-        else {
+        } else {
             jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":"${value}"`);
         }
     }
