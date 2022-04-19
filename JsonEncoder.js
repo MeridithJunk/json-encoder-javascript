@@ -27,7 +27,11 @@ function encoder(object) {
         } else {
             let objectString = "";
             for (const [subKey, subValue] of Object.entries(value)) {
-                objectString +=  writeStringForMultiples(objectString,`"${subKey}":"${subValue}"`);
+                if(typeof subValue === 'string') {
+                    objectString += writeStringForMultiples(objectString, `"${subKey}":"${subValue}"`);
+                } else {
+                    objectString += writeStringForMultiples(objectString, `"${subKey}":${subValue}`);
+                }
             }
             jsonEncodedString += `"${key}":{${objectString}}`
         }
