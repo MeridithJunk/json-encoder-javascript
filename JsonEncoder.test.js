@@ -58,4 +58,9 @@ describe("Json Encoder Tests", () => {
         let sampleObject = {something: {newThing: 34, blah: 92}};
         expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
     });
+
+    test("Given an object with an object with a null value When encoded Then Return a valid JSON", () => {
+        let sampleObject = {something: null};
+        expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
+    });
 });

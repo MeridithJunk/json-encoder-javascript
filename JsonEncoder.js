@@ -23,7 +23,10 @@ function EncodeJson(value, key) {
         jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
     } else if (typeof value === 'string') {
         jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":"${value}"`);
-    } else {
+    } else if (value === null){
+        jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":null`);
+    }
+    else {
         let objectString = "";
         for (const [subKey, subValue] of Object.entries(value)) {
             objectString += writeStringForMultiples(objectString, EncodeJson(subValue, subKey));
