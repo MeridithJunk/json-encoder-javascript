@@ -5,15 +5,20 @@ function writeStringForMultiples(jsonEncodedString, value) {
 function encoder(object) {
     let jsonEncodedString = "";
     for (const [key, value] of Object.entries(object)) {
-        if (typeof value === 'number') {
-            jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
-        }
-        else if(Array.isArray(value)){
+        if(Array.isArray(value)){
             let arrayString = ""
            value.forEach(subValue => {
-               arrayString += writeStringForMultiples(arrayString, `"${subValue}"`);
+               if(typeof subValue == 'number'){
+                   arrayString += writeStringForMultiples(arrayString, `${subValue}`);
+               }
+               else {
+                   arrayString += writeStringForMultiples(arrayString, `"${subValue}"`);
+               }
            })
            jsonEncodedString += `"${key}":[${arrayString}]`;
+        }
+        else if (typeof value === 'number') {
+            jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
         }
         else {
             jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":"${value}"`);
