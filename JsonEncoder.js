@@ -22,8 +22,14 @@ function encoder(object) {
             jsonEncodedString += writeStringForMultiples(jsonEncodedString, encodedArray);
         } else if (typeof value === 'number') {
             jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
-        } else {
+        } else if (typeof value === 'string'){
             jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":"${value}"`);
+        } else {
+            let objectString = "";
+            for (const [subKey, subValue] of Object.entries(value)) {
+                objectString +=  writeStringForMultiples(objectString,`"${subKey}":"${subValue}"`);
+            }
+            jsonEncodedString += `"${key}":{${objectString}}`
         }
     }
     return "{" + jsonEncodedString + "}";

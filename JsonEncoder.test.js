@@ -43,4 +43,14 @@ describe("Json Encoder Tests", () => {
         let sampleObject = {something: [1, 49, "simple"], anotherThing: ["test", 25, "moo"]};
         expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
     });
+
+    test("Given an object with an object with a string When encoded Then Return a valid JSON", () => {
+        let sampleObject = {something: {newThing: "tada"}};
+        expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
+    });
+
+    test("Given an object with an object with multiple strings When encoded Then Return a valid JSON", () => {
+        let sampleObject = {something: {newThing: "tada", blah: "moo"}};
+        expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
+    });
 });
