@@ -14,28 +14,35 @@ function encodeArrays(value, key) {
     return `"${key}":[${arrayString}]`;
 }
 
-function encoder(object) {
+function EncodeJson(value, key) {
+    let jsonEncodedString = "";
+    if (Array.isArray(value)) {
+        const encodedArray = encodeArrays(value, key);
+        jsonEncodedString += writeStringForMultiples(jsonEncodedString, encodedArray);
+    } else if (typeof value === 'number') {
+        jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
+    } else if (typeof value === 'string') {
+        jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":"${value}"`);
+    } else {
+        let objectString = "";
+        for (const [subKey, subValue] of Object.entries(value)) {
+            objectString += writeStringForMultiples(objectString, EncodeJson(subValue, subKey));
+        }
+        jsonEncodedString += `"${key}":{${objectString}}`
+    }
+    return jsonEncodedString;
+}
+
+function breakdownJson(object) {
     let jsonEncodedString = "";
     for (const [key, value] of Object.entries(object)) {
-        if (Array.isArray(value)) {
-            const encodedArray = encodeArrays(value, key);
-            jsonEncodedString += writeStringForMultiples(jsonEncodedString, encodedArray);
-        } else if (typeof value === 'number') {
-            jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":${value}`);
-        } else if (typeof value === 'string'){
-            jsonEncodedString += writeStringForMultiples(jsonEncodedString, `"${key}":"${value}"`);
-        } else {
-            let objectString = "";
-            for (const [subKey, subValue] of Object.entries(value)) {
-                if(typeof subValue === 'string') {
-                    objectString += writeStringForMultiples(objectString, `"${subKey}":"${subValue}"`);
-                } else {
-                    objectString += writeStringForMultiples(objectString, `"${subKey}":${subValue}`);
-                }
-            }
-            jsonEncodedString += `"${key}":{${objectString}}`
-        }
+        jsonEncodedString += writeStringForMultiples(jsonEncodedString, EncodeJson(value, key, jsonEncodedString));
     }
+    return jsonEncodedString;
+}
+
+function encoder(object) {
+    let jsonEncodedString = breakdownJson(object);
     return "{" + jsonEncodedString + "}";
 }
 
