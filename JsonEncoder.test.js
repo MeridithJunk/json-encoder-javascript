@@ -20,4 +20,9 @@ describe("Json Encoder Tests", () => {
         let sampleObject = {something: 1, anotherThing: 52};
         expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
     });
+
+    test("Given an object with an array of a single string When encoded Then Return a valid JSON", () => {
+        let sampleObject = {something: ["test"]};
+        expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
+    });
 });
