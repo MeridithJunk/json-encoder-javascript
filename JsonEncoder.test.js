@@ -73,4 +73,9 @@ describe("Json Encoder Tests", () => {
         let sampleObject = {something: [{test: 23},{blah: "falala"}]};
         expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
     });
+
+    test("Given an array of arrays When encoded Then Return a valid JSON", () => {
+        let sampleObject = {something: [[1,2,3],["what", "moo", "test"]]};
+        expect(encoder(sampleObject)).toBe(JSON.stringify(sampleObject));
+    });
 });
