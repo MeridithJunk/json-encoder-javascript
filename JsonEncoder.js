@@ -7,8 +7,11 @@ function encodeArrays(value, key) {
     value.forEach(subValue => {
         if (typeof subValue == 'number') {
             arrayString += writeStringForMultiples(arrayString, `${subValue}`);
-        } else {
+        } else if (typeof subValue == "string"){
             arrayString += writeStringForMultiples(arrayString, `"${subValue}"`);
+        } else {
+            let objectString = breakdownJson(subValue);
+            arrayString += writeStringForMultiples(arrayString,`{${objectString}}`);
         }
     })
     return `"${key}":[${arrayString}]`;
